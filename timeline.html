@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">📅 Timeline</div>
+        <button class="theme-toggle" onclick="toggleTheme()"></button>
+    </header>
+
+    <main>
+        <section id="timeline">
+            <article class="timeline-container">
+                <div class="timeline-line">
+                    <div class="timeline-dot" id="dot1969" style="left: 15%;" onclick="activateDot(this);"></div>
+                    <div class="timeline-dot active" id="dot1977" style="left: 35%;" onclick="activateDot(this);"></div>
+                    <div class="timeline-dot" id="dot1981" style="left: 55%;" onclick="activateDot(this);"></div>
+                    <div class="timeline-dot" id="dot1985" style="left: 75%;" onclick="activateDot(this);"></div>
+                    <div class="year" style="left: 15%;" onclick="activateDot(document.getElementById('dot1969'));">1969</div>
+                    <div class="year" style="left: 35%;" onclick="activateDot(document.getElementById('dot1977'));">1977</div>
+                    <div class="year" style="left: 55%;" onclick="activateDot(document.getElementById('dot1981'));">1981</div>
+                    <div class="year" style="left: 75%;" onclick="activateDot(document.getElementById('dot1985'));">1985</div>
+                </div>
+            </article>
+
+            <article class="event-card" id="event-1969">
+                <header class="event-header">
+                    <div class="event-year">1969</div>
+                    <h2 class="event-title">ARPANET - Birth of the Internet</h2>
+                </header>
+                <div class="event-content">
+                    <figure class="event-image">
+                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=200&h=150&fit=crop" alt="Early computer network" />
+                    </figure>
+                    <div class="event-description">
+                        <p>ARPANET was the predecessor to the modern internet that was first deployed connecting four universities.</p>
+                        <p>This groundbreaking network laid the foundation for global digital communication and modern networking protocols.</p>
+                        <button class="learn-more" onclick="showModal('1969-arpanet')">Learn More</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="event-card show" id="event-1977">
+                <header class="event-header">
+                    <div class="event-year">1977</div>
+                    <h2 class="event-title">Introduction of the First Personal Computer</h2>
+                </header>
+                <div class="event-content">
+                    <figure class="event-image">
+                        <img src="https://www.zdnet.com/a/img/resize/a8dc3d972aa80f7054cd1fa9137a79f64eb5f4cb/2014/09/05/3177816a-34e6-11e4-9e6a-00505685119a/my-first-personal-computer-the-apple-ii.jpg?auto=webp&fit=crop&height=1200&width=1200" alt="Vintage computer from 1977" />
+                    </figure>
+                    <div class="event-description">
+                        <p>The first personal computer was introduced in 1977 which revolutionized the way people interacted with technology.</p>
+                        <p>These early systems made computing accessible to individuals and transformed various industries.</p>
+                        <button class="learn-more" onclick="showModal('1977-computer')">Learn More</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="event-card" id="event-1981">
+                <header class="event-header">
+                    <div class="event-year">1981</div>
+                    <h2 class="event-title">IBM PC Launch</h2>
+                </header>
+                <div class="event-content">
+                    <figure class="event-image">
+                        <img src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=200&h=150&fit=crop" alt="IBM PC from 1981" />
+                    </figure>
+                    <div class="event-description">
+                        <p>IBM launched it's personal computer setting the standard for PC architecture that dominated the industry for decades.</p>
+                        <p>It's open architecture encouraged third-party development and widespread adoption establishing the foundation for modern PC computing.</p>
+                        <button class="learn-more" onclick="showModal('1981-ibm')">Learn More</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="event-card" id="event-1985">
+                <header class="event-header">
+                    <div class="event-year">1985</div>
+                    <h2 class="event-title">Microsoft Windows 1.0 Launch</h2>
+                </header>
+                <div class="event-content">
+                    <figure class="event-image">
+                        <img src="https://geeks.co.uk/wp-content/uploads/2019/11/MicrosoftTeams-image.png" alt="Microsoft Windows interface" />
+                    </figure>
+                    <div class="event-description">
+                        <p>Microsoft Windows 1.0 introduced the first graphical user interface from Microsoft revolutionizing personal computing with point and clicks functionality.</p>
+                        <p>This groundbreaking operating system laid the foundation for modern desktop computing and established Microsoft as a dominant force in the software industry.</p>
+                        <button class="learn-more" onclick="showModal('1985-windows')">Learn More</button>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <div id="modal">
+        <div class="modal-content">
+            <p>To learn more about this please search the web...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
