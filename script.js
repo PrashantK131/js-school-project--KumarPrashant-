@@ -41,28 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
             "wikipediaURL": "https://en.wikipedia.org/wiki/World_Wide_Web"
         },
         {
-            "year": 1995,
-            "title": "JavaScript Is Created",
-            "description": "Brendan Eich created JavaScript for Netscape Navigator, laying the foundation for dynamic web pages. This scripting language became essential for front-end development and interactive websites.",
-            "imageURL": "https://static.vecteezy.com/system/resources/previews/027/127/463/non_2x/javascript-logo-javascript-icon-transparent-free-png.png",
-            "category": "Software",
-            "wikipediaURL": "https://en.wikipedia.org/wiki/JavaScript"
-        },
-        {
             "year": 2004,
             "title": "Facebook is Founded",
             "description": "Facebook was launched by Mark Zuckerberg when he was in Harvard University which changed the landscape of social interaction. Facebook grew into a global phenomenon connecting billions of people, influencing culture and communication.",
             "imageURL": "https://logowik.com/content/uploads/images/facebook3939.logowik.com.webp",
             "category": "Social Media",
             "wikipediaURL": "https://en.wikipedia.org/wiki/Facebook"
-        },
-        {
-            "year": 2007,
-            "title": "First iPhone is Released",
-            "description": "Apple introduced a revolutionary smartphone named as iPhone that combined a phone, an iPod and an internet communicator. The iPhone's touch-based interface and app ecosystem set the standard for the modern mobile industry.",
-            "imageURL": "https://images.freeimages.com/fic/images/icons/2309/touchscreen_icons/512/2007_apple_iphone.png",
-            "category": "Hardware",
-            "wikipediaURL": "https://en.wikipedia.org/wiki/IPhone"
         }
     ];
 
