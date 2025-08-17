@@ -1,0 +1,33 @@
+{
+  "name": "timeline-app",
+  "version": "1.0.0",
+  "description": "A TypeScript-based timeline application showcasing historical technology events",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "dev": "npm run build:watch",
+    "type-check": "tsc --noEmit",
+    "lint": "echo 'Add ESLint configuration for linting'",
+    "serve": "python3 -m http.server 8000",
+    "start": "npm run build && npm run serve"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "keywords": [
+    "typescript",
+    "timeline",
+    "history",
+    "technology",
+    "web-application"
+  ],
+  "author": "Timeline App Developer",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
