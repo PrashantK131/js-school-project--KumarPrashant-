@@ -1,33 +1,111 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { EventModalProps } from '../types/timeline';
 
-/**
- * Modal component for displaying detailed event information
- */
+/* Accessible Modal component for displaying detailed event information and using native <dialog> element with proper focus management */
 const EventModal: React.FC<EventModalProps> = ({ event, isOpen, onClose }) => {
-  // Handle escape key to close modal
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+  
+  const focusableElementsRef = useRef<HTMLElement[]>([]);
 
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (isOpen && event) {
+      previousFocusRef.current = document.activeElement as HTMLElement;
+      
+      dialog.showModal();
+      
       document.body.style.overflow = 'hidden';
+      
+      setupFocusTrap();
+      
+      const firstFocusable = focusableElementsRef.current[0];
+      if (firstFocusable) {
+        firstFocusable.focus();
+      }
+    } else if (!isOpen) {
+      dialog.close();
+      document.body.style.overflow = 'unset';
+      
+      // Restore focus to the element that opened the modal
+      if (previousFocusRef.current) {
+        previousFocusRef.current.focus();
+      }
+    }
+  }, [isOpen, event]);
+
+  const setupFocusTrap = () => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    // Get all focusable elements within the modal
+    const focusableSelectors = [
+      'button:not([disabled])',
+      '[href]',
+      'input:not([disabled])',
+      'select:not([disabled])',
+      'textarea:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])'
+    ];
+
+    focusableElementsRef.current = Array.from(
+      dialog.querySelectorAll(focusableSelectors.join(','))
+    ) as HTMLElement[];
+  };
+
+  // Handle keyboard navigation within modal
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      onClose();
+      return;
     }
 
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, onClose]);
+    if (e.key === 'Tab') {
+      trapFocus(e);
+    }
+  };
 
-  if (!isOpen || !event) return null;
+  // Focus trap implementation
+  const trapFocus = (e: React.KeyboardEvent) => {
+    const focusableElements = focusableElementsRef.current;
+    if (focusableElements.length === 0) return;
 
-  const handleOverlayClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (e.shiftKey) {
+      // Shift + Tab: focus previous element
+      if (document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      }
+    } else {
+      // Tab: focus next element
+      if (document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
+  };
+
+  // Handle backdrop click (click outside modal content)
+  const handleDialogClick = (e: React.MouseEvent) => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    // Close if clicking on the dialog backdrop (not the content)
+    const rect = dialog.getBoundingClientRect();
+    const clickedOnBackdrop = (
+      e.clientX < rect.left ||
+      e.clientX > rect.right ||
+      e.clientY < rect.top ||
+      e.clientY > rect.bottom
+    );
+
+    if (clickedOnBackdrop) {
       onClose();
     }
   };
@@ -37,38 +115,71 @@ const EventModal: React.FC<EventModalProps> = ({ event, isOpen, onClose }) => {
     target.style.display = 'none';
   };
 
+  if (!event) return null;
+
   return (
-    <div id="modal" style={{ display: 'flex' }} onClick={handleOverlayClick}>
-      <div className="modal-content">
-        <button 
-          className="modal-close" 
-          onClick={onClose} 
-          aria-label="Close modal"
-        >
-          ✖
-        </button>
-        <div id="modal-details">
-          <h2>{event.title}</h2>
-          <p><strong>Category:</strong> {event.category}</p>
-          <p>{event.description}</p>
-          <img 
-            src={event.imageURL} 
-            alt={event.title} 
-            style={{ width: '100%', borderRadius: '8px', marginTop: '1rem' }}
-            onError={handleImageError}
-          />
-          <a 
-            href={event.wikipediaURL} 
-            className="learn-more" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{ display: 'block', marginTop: '1rem', textAlign: 'center' }}
+    <dialog
+      ref={dialogRef}
+      className="event-modal"
+      onKeyDown={handleKeyDown}
+      onClick={handleDialogClick}
+      aria-labelledby="modal-title"
+      aria-describedby="modal-description"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <header className="modal-header">
+          <h2 id="modal-title" className="modal-title">
+            {event.title}
+          </h2>
+          <button 
+            className="modal-close" 
+            onClick={onClose} 
+            aria-label={`Close ${event.title} details`}
+            type="button"
           >
-            Visit Wikipedia
-          </a>
+            <span aria-hidden="true">✖</span>
+          </button>
+        </header>
+        
+        <div id="modal-description" className="modal-body">
+          <div className="modal-meta">
+            <p><strong>Year:</strong> {event.year}</p>
+            <p><strong>Category:</strong> {event.category}</p>
+          </div>
+          
+          <p className="modal-description-text">{event.description}</p>
+          
+          <div className="modal-image-container">
+            <img 
+              src={event.imageURL} 
+              alt={`Illustration for ${event.title}`}
+              className="modal-image"
+              onError={handleImageError}
+            />
+          </div>
+          
+          <div className="modal-actions">
+            <a 
+              href={event.wikipediaURL} 
+              className="learn-more-link" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-describedby="external-link-description"
+            >
+              Learn More on Wikipedia
+              <span className="sr-only"> (opens in new tab)</span>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
+      
+      {/* Screen reader only description for external links */}
+      <div id="external-link-description" className="sr-only">
+        External links will open in a new browser tab
+      </div>
+    </dialog>
   );
 };
 
