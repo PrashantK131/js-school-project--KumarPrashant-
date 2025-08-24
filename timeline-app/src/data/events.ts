@@ -1,8 +1,6 @@
 import { TimelineEvent } from '../types/timeline';
 
-/**
- * Static timeline event data
- */
+/* Static timeline event data */
 export const timelineEvents: readonly TimelineEvent[] = [
   {
     year: 1969,
